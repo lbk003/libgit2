@@ -375,11 +375,11 @@ static void close_and_claim_current_hunk(git_blame *blame, const char *orig_path
 static void match_line(git_blame *blame, const char *line, size_t len, const char *orig_path)
 {
 	git_blame_hunk *hunk = blame->current_hunk;
-	const char *raw = raw_line(blame, blame->current_blame_line);
+	const char *raw = (blame->current_blame_line == 0 ? NULL : raw_line(blame, blame->current_blame_line));
 	size_t i, j;
 
 	/* First, try the current hunk's current line. */
-	if (hunk && !memcmp(raw, line, len)) {
+	if (hunk && raw && !memcmp(raw, line, len)) {
 		DEBUGF("•\n");
 		return;
 	}
